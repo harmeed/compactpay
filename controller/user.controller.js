@@ -220,15 +220,10 @@ exports.resetPassword = async (req, res, next) => {
 exports.updateKyc= async (req, res) => {
   try {
     const {  address,
-        // {const validMeansOfIdentification = { 
-        //   nin,
-        //   votersCard,
-        //   driversLicence,
-        //   internationalPassport}
-        // },
-          bvn,
+        validMeansOfIdentification,
+        bvn,
         transactionPin,
-         confirmTransactionPin 
+        confirmTransactionPin 
         }
          = req.body;
     const id = req.query.id;
@@ -261,6 +256,7 @@ console.log (id)
       {
         address,
         validMeansOfIdentification,
+        bvn,
         transactionPin: hashedTransactionPin,
       },
       { new: true }

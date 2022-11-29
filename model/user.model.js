@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema(
     },
     validMeansOfIdentification: {
       type: String,
+      enum: ['Nin', 'DriversLicense', 'VotersCard', 'InternationalPassport'],
     },
     bvn: {
       type: String,
