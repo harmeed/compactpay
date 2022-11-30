@@ -1,6 +1,7 @@
 const express = require ("express");
 require ("dotenv").config()
 const jwt = require('jsonwebtoken');
+const cors = require ("cors");
 const { resetPassword } = require("./controller/user.controller");
 const connectDB = require ("./db/database");
 const userRoutes = require("./router/user.routes");
@@ -74,8 +75,18 @@ app.post("/resetPassword/:id/:token", (req, res, next) => {
   res.send(user);
 
 });
+
+
 app.use("/api/users", userRoutes);
 // app.use("/api/news", newsRoutes);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: "*",
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "😒😒😒 oops page not found" });

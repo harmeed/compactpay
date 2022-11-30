@@ -32,11 +32,12 @@ exports.userSignup = async (req, res, next) => {
       !firstName ||
       !middleName ||
       !lastName ||
-      !email ||
       !phoneNumber ||
+      !email ||
       !password ||
       !confirmPassword
-    ) {
+    )
+     {
       return res.status(400).json({ message: "please fill all fields" });
     }
         if (password != confirmPassword) {
@@ -273,8 +274,8 @@ console.log (id)
 
 exports.getUserByEmail = async (req, res) => {
   try {
-    const email = req.query.email;
-    const user = await User.findOne({ email });
+    const email = req.params.email;
+    const user = await User.find({ email:email });
     return res.status(200).json({ data: user });
   } catch (error) {
     console.log(error);
