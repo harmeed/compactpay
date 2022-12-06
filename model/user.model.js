@@ -18,10 +18,11 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
+      enum: ["Male", "Female"],
     },
     phoneNumber: {
       type: String,
-      required: true,
+      unique: true,
     },
     address: {
       type: String,
@@ -29,16 +30,19 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     emailtoken: {
       type: String,
     },
     validMeansOfIdentification: {
       type: String,
-      enum: ['Nin', 'DriversLicense', 'VotersCard', 'InternationalPassport'],
+      enum: ["Nin", "DriversLicense", "VotersCard", "InternationalPassport"],
+      unique: true,
     },
     bvn: {
       type: String,
+      unique: true,
     },
     transactionPin: {
       type: String,
@@ -48,6 +52,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      unique: true,
+    },
+    otp: {
+      type: String,
+      default: "",
     },
   },
   {
