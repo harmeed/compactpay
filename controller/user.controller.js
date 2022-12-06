@@ -132,28 +132,17 @@ exports.updateKyc= async (req, res) => {
       address,
       validMeansOfIdentification,
       bvn,
-      transactionPin,
-      confirmTransactionPin,
     } = req.body;
     const id = req.query.id;
       // const tx_ref = v4();
     if (
       !address ||
       !validMeansOfIdentification ||
-      !bvn ||
-      !transactionPin ||
-      !confirmTransactionPin 
-
+      !bvn 
     ) {
       return res.status(400).json({ message: "please fill all fields" });
     }
-    if (transactionPin != confirmTransactionPin) {
-      return res.status(409).json({
-        message: "The entered pin do not match!",
-      });
-    }
-const salt = await bcrypt.genSalt(10);
-const hashedTransactionPin = await bcrypt.hash(transactionPin, salt);
+    
 
 console.log (id)
 // const user = await User.findById({ id });
@@ -167,7 +156,6 @@ console.log (id)
         address,
         validMeansOfIdentification,
         bvn,
-        transactionPin: hashedTransactionPin,
       },
       { new: true }
     );
