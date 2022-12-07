@@ -263,9 +263,9 @@ exports.forgotPassword = (req, res) => {
       .status(400)
       .json({ error: error.message, message: "user does not exist" });
   }
-  const token = jwt.sign({ _id: user._id }, process.env.RESET_LINK_KEY, {
-    expiresIn: process.env.RESET_LINK_KEY_TTL,
-  });
+  // const token = jwt.sign({ _id: user._id }, process.env.RESET_LINK_KEY, {
+  //   expiresIn: process.env.RESET_LINK_KEY_TTL,
+  // });
   let OTP = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
     specialChars: false,
@@ -297,7 +297,7 @@ exports.forgotPassword = (req, res) => {
   });
   return user.updateOne({ otp: OTP }, (err) => {
     if (err) {
-      return res.status(400).json({ error: "reset password link error" });
+      // return res.status(400).json({ error: "reset password link error" });
     } else {
       return res.status(200).json({ message: "follow the instructions" });
     }
