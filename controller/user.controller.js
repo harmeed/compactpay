@@ -147,6 +147,10 @@ exports.updateKyc= async (req, res) => {
     
 
 console.log (id)
+// const user = await User.findById({ id });
+// if (!user) {
+//       return res.status(404).json({ message: "user does not exist" });
+//     }
     const updateKyc = await User.findByIdAndUpdate(
       
         id,
