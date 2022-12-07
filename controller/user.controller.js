@@ -131,13 +131,15 @@ exports.updateKyc= async (req, res) => {
     const {
       address,
       validMeansOfIdentification,
+      number,
       bvn,
     } = req.body;
     const id = req.query.id;
-      const tx_ref = v4();
+      // const tx_ref = v4();
     if (
       !address ||
       !validMeansOfIdentification ||
+      !number||
       !bvn 
     ) {
       return res.status(400).json({ message: "please fill all fields" });
@@ -145,16 +147,13 @@ exports.updateKyc= async (req, res) => {
     
 
 console.log (id)
-const user = await User.findById({ id });
-if (!user) {
-      return res.status(404).json({ message: "user does not exist" });
-    }
     const updateKyc = await User.findByIdAndUpdate(
       
         id,
       {
         address,
         validMeansOfIdentification,
+        number,
         bvn,
       },
       { new: true }

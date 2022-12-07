@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
       enum: ["Nin", "DriversLicense", "VotersCard", "InternationalPassport"],
       unique: true,
     },
+    number: {
+      type: String,
+      required: true,
+    },
     bvn: {
       type: String,
       unique: true,
