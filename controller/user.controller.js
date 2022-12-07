@@ -134,7 +134,7 @@ exports.updateKyc= async (req, res) => {
       bvn,
     } = req.body;
     const id = req.query.id;
-      // const tx_ref = v4();
+      const tx_ref = v4();
     if (
       !address ||
       !validMeansOfIdentification ||
@@ -145,10 +145,10 @@ exports.updateKyc= async (req, res) => {
     
 
 console.log (id)
-// const user = await User.findById({ id });
-// if (!user) {
-//       return res.status(404).json({ message: "user does not exist" });
-//     }
+const user = await User.findById({ id });
+if (!user) {
+      return res.status(404).json({ message: "user does not exist" });
+    }
     const updateKyc = await User.findByIdAndUpdate(
       
         id,
@@ -259,9 +259,9 @@ exports.forgotPassword = (req, res) => {
       .status(400)
       .json({ error: error.message, message: "user does not exist" });
   }
-  // const token = jwt.sign({ _id: user._id }, process.env.RESET_LINK_KEY, {
-  //   expiresIn: process.env.RESET_LINK_KEY_TTL,
-  // });
+  const token = jwt.sign({ _id: user._id }, process.env.RESET_LINK_KEY, {
+    expiresIn: process.env.RESET_LINK_KEY_TTL,
+  });
   let OTP = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
     specialChars: false,

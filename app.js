@@ -9,15 +9,8 @@ const userRoutes = require("./router/user.routes");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
-app.set ('view engine', 'ejs');
-
-let user = {
-  // id: "compactpay",
-  // email: "compactpay22@gmail.com",
-  // password: "compact22",
-  
-}
-const JWT_SECRET = 'COMPACTPAY2022'
+// app.set ('view engine', 'ejs');
+// const JWT_SECRET = 'COMPACTPAY2022'
 
 connectDB();
 const port = process.env.PORT || 5678;
@@ -32,8 +25,8 @@ app.get('/forgotPassword',(req, res, next) => {
 app.post('/forgotPassword', (req, res, next) =>{
   const { email } = req.body;
   if (email !== user.email) {
-    // res.send('user does not exist')
-    // return;
+    res.send('user does not exist')
+    return;
   }
   res.send(email);
 
@@ -78,7 +71,6 @@ app.post("/resetPassword/:id/:token", (req, res, next) => {
 
 
 app.use("/api/users", userRoutes);
-// app.use("/api/news", newsRoutes);
 
 app.use(
   cors({
