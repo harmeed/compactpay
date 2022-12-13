@@ -134,6 +134,7 @@ exports.updateKyc= async (req, res) => {
       validMeansOfIdentification,
       number,
       bvn,
+      password,
     } = req.body;
     const id = req.query.id;
       // const tx_ref = v4();
@@ -141,7 +142,8 @@ exports.updateKyc= async (req, res) => {
       !address ||
       !validMeansOfIdentification ||
       !number||
-      !bvn 
+      !bvn ||
+      !password
     ) {
       return res.status(400).json({ message: "please fill all fields" });
     }
@@ -160,6 +162,7 @@ console.log (id)
         validMeansOfIdentification,
         number,
         bvn,
+        password,
       },
       { new: true }
     );
@@ -306,7 +309,7 @@ exports.forgotPassword = (req, res) => {
 
 exports.resetPassword = async(req, res, next) =>{
   const {newPassword, confirmPassword,email, otp }= req.body;
-  
+   
   try {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(newPassword, salt);
@@ -366,3 +369,158 @@ exports.resetPassword = async(req, res, next) =>{
         next(error);
   }
 }
+exports.resetPassword = async(req, res, next) =>{
+  const {newPassword, confirmPassword,email, otp }= req.body;
+   
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(newPassword, salt);
+      if (newPassword != confirmPassword) {
+    console.log({message: "password does not match"});
+          };
+      User.findOne({ otp }, (err, user) => {
+        if (err || !user) {
+          return res
+            .status(400)
+            .json({ error: "user with this token or otp does not exist" });
+        }
+
+        const obj = {
+          password: hash,
+        };
+
+        user = _.extend(user, obj);
+        user.save((err) => {
+          if (err) {
+            return res.status(400).json({ error: "reset password error" });
+          } else {
+            return res.status(200).json({
+              message: "your password has been changed succesfully",
+            });
+          }
+        });
+      });
+  const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.USER_MAIL,
+          pass: process.env.PASSWORD,
+        },
+      });
+
+      const mailOptions = {
+        from: "compactpay22@gmail.com",
+        to: email,
+        subject: ` Your Password has been updated `,
+        html: `
+      <h2> Here's your new password </h2>
+      <p> new password: ${confirmPassword}</p>
+      `,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log("Email Sent to " + info.accepted);
+      });
+    // } else {
+    //   return res.status(401).json({ error: "authentication error" });
+    // }
+  } catch (error) {
+        next(error);
+  }
+}
+exports.resetPassword = async(req, res, next) =>{
+  const {newPassword, confirmPassword,email, otp }= req.body;
+   
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(newPassword, salt);
+      if (newPassword != confirmPassword) {
+    console.log({message: "password does not match"});
+          };
+      User.findOne({ otp }, (err, user) => {
+        if (err || !user) {
+          return res
+            .status(400)
+            .json({ error: "user with this token or otp does not exist" });
+        }
+
+        const obj = {
+          password: hash,
+        };
+
+        user = _.extend(user, obj);
+        user.save((err) => {
+          if (err) {
+            return res.status(400).json({ error: "reset password error" });
+          } else {
+            return res.status(200).json({
+              message: "your password has been changed succesfully",
+            });
+          }
+        });
+      });
+  const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.USER_MAIL,
+          pass: process.env.PASSWORD,
+        },
+      });
+
+      const mailOptions = {
+        from: "compactpay22@gmail.com",
+        to: email,
+        subject: ` Your Password has been updated `,
+        html: `
+      <h2> Here's your new password </h2>
+      <p> new password: ${confirmPassword}</p>
+      `,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log("Email Sent to " + info.accepted);
+      });
+    // } else {
+    //   return res.status(401).json({ error: "authentication error" });
+    // }
+  } catch (error) {
+        next(error);
+  }
+}
+// exports.otpVerification = async(req, res, next) =>{
+//   const { otp }= req.body;
+   
+//   try {
+//       if (otp != otp) {
+//     console.log({message: "otp does not match"});
+//           };
+//       User.findOne({ otp }, (err, user) => {
+//         if (err || !user) {
+//           return res
+//             .status(400)
+//             .json({ error: "user with this token or otp does not exist" });
+//         }
+
+
+//       });
+
+
+//       transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//           console.log(error);
+//         }
+//         console.log("Email Sent to " + info.accepted);
+//       });
+//     //  } else {
+//     //   return res.status(401).json({ error: "authentication error" });
+//     // }
+//   } catch (error) {
+// //         next(error);
+//   }
+// }

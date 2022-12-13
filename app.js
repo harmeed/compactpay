@@ -9,8 +9,6 @@ const userRoutes = require("./router/user.routes");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
-app.set ('view engine', 'ejs');
-const JWT_SECRET = 'COMPACTPAY2022'
 
 connectDB();
 const port = process.env.PORT || 5678;
@@ -18,9 +16,6 @@ const port = process.env.PORT || 5678;
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "home page 😊😊😊😊😊" });
 });
-app.get('/forgotPassword',(req, res, next) => {
-  res.render('forgotPassword');
-})
 
 app.post('/forgotPassword', (req, res, next) =>{
   const { email } = req.body;
