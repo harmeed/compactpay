@@ -8,10 +8,11 @@ const _ = require("lodash");
 const saltRounds = 10;
 
 const Flutterwave = require("flutterwave-node-v3");
-const flw = new Flutterwave(
-  process.env.FLW_PUBLIC_KEY,
-  process.env.FLW_SECRET_KEY
-);
+const { response } = require("express");
+// const flw = new Flutterwave(
+//   process.env.FLW_PUBLIC_KEY,
+//   process.env.FLW_SECRET_KEY
+// );
 // const details = {
 //   email: "developers@flutterwavego.com",
 // };
@@ -101,7 +102,7 @@ exports.userLogin = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     }
-
+// console.log(user);
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
       return res.status(400).json({ message: "invalid credentials" });
@@ -117,7 +118,7 @@ exports.userLogin = async (req, res, next) => {
     res.cookie("access-token", token);
     return res
       .status(202)
-      .json({ message: "user logged in successfully", token: token });
+      .json({ message: "user logged in successfully", token: token, user },);
   } catch (error) {
     console.log(error);
     return res
@@ -147,9 +148,13 @@ exports.updateKyc= async (req, res) => {
     ) {
       return res.status(400).json({ message: "please fill all fields" });
     }
-    
+   const user = await User.findById(id)
+  //  console.log(user);
+      const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+    return  res.status(400).json("Invalid Password")
+    }
 
-console.log (id)
 // const user = await User.findById({ id });
 // if (!user) {
 //       return res.status(404).json({ message: "user does not exist" });
@@ -162,44 +167,62 @@ console.log (id)
         validMeansOfIdentification,
         number,
         bvn,
-        password,
       },
       { new: true }
     );
-    var axios = require("axios");
-    var data = JSON.stringify({
-      email: "hammedolalekan60@gmail.com",
-      is_permanent: true,
-      bvn: "22244540348",
-      tx_ref: "trdw345678987654",
-      phonenumber: "08165594823",
-      firstname: "Harmed",
-      lastname: "Olalekan",
-      narration: "Angela Ashley-Osuzoka",
-    });
+    // var axios = require("axios");
+    // var data = JSON.stringify({
+    //   email: "hammedolalekan60@gmail.com",
+    //   is_permanent: true,
+    //   bvn: "22244540348",
+    //   tx_ref: "trdw345678987654",
+    //   phonenumber: "08165594823",
+    //   firstname: "Harmed",
+    //   lastname: "Olalekan",
+    //   narration: "Angela Ashley-Osuzoka",
+    // });
 
-    var config = {
-      method: "post",
-      url: "https://api.flutterwave.com/v3/virtual-account-numbers",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
-      },
-      data: data,
-    };
+    // var config = {
+    //   method: "post",
+    //   url: "https://api.flutterwave.com/v3/virtual-account-numbers",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+    //   },
+    //   data: data,
+    // };
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios(config)
+    //   .then( (response)=> {
+    //     console.log(JSON.stringify(response.data));
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+      const flw = new Flutterwave(
+        process.env.FLW_PUBLIC_KEY,
+        process.env.FLW_SECRET_KEY
+      );
+      // const reference = v4();
+      const wallet = {
+        // firstName: "hammedolalekan60@gmail.com",
+        // lastName,
+        bvn: "22244540348",
+        contactAddress: "3, olaola",
+        email: "hammedolalekan60@gmail.com",
+        phoneNumber: "08165594823",
+        is_permanent: true,
+        tx_ref: "765edfgtr4567ujhgf",
+      };
+      const response = await flw.VirtualAcct.create(wallet);
+      // res
+      //   .status(200)
+      //   .json({ message: "Wallet successfully created", response });
 
     return res
       .status(200)
       .json(
-        { message: "updated successfully", updateKyc }
+        { message: "updated successfully", updateKyc, response }
       );
   } catch (error) {
     console.log(error);
