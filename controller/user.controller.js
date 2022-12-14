@@ -292,11 +292,7 @@ exports.forgotPassword = (req, res) => {
   // const token = jwt.sign({ _id: user._id }, process.env.RESET_LINK_KEY, {
   //   expiresIn: process.env.RESET_LINK_KEY_TTL,
   // });
-  let OTP = otpGenerator.generate(6, {
-    upperCaseAlphabets: false,
-    specialChars: false,
-    digits: true,
-  });
+        const OTP = Math.floor(1000 + Math.random() * 9000);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -330,70 +326,36 @@ exports.forgotPassword = (req, res) => {
   });
 };
 
-exports.resetPassword = async(req, res, next) =>{
-  const {newPassword, confirmPassword,email, otp }= req.body;
+exports.otpVerification = async(req, res, next) =>{
+  const {otp }= req.body;
    
   try {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(newPassword, salt);
-      if (newPassword != confirmPassword) {
-    console.log({message: "password does not match"});
-          };
+   
+   
       User.findOne({ otp }, (err, user) => {
         if (err || !user) {
           return res
             .status(400)
             .json({ error: "user with this token or otp does not exist" });
+            
         }
+        const otp = Math.floor(1000 + Math.random() * 9000);
 
-        const obj = {
-          password: hash,
-        };
 
-        user = _.extend(user, obj);
-        user.save((err) => {
           if (err) {
             return res.status(400).json({ error: "reset password error" });
           } else {
             return res.status(200).json({
-              message: "your password has been changed succesfully",
+              message: "Otp Valid, proceed to change your password",
             });
           }
         });
-      });
-  const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.USER_MAIL,
-          pass: process.env.PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: "compactpay22@gmail.com",
-        to: email,
-        subject: ` Your Password has been updated `,
-        html: `
-      <h2> Here's your new password </h2>
-      <p> new password: ${confirmPassword}</p>
-      `,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        }
-        console.log("Email Sent to " + info.accepted);
-      });
-    // } else {
-    //   return res.status(401).json({ error: "authentication error" });
-    // }
   } catch (error) {
         next(error);
   }
 }
 exports.resetPassword = async(req, res, next) =>{
-  const {newPassword, confirmPassword,email, otp }= req.body;
+  const {newPassword, confirmPassword }= req.body;
    
   try {
     const salt = await bcrypt.genSalt(saltRounds);
@@ -402,12 +364,7 @@ exports.resetPassword = async(req, res, next) =>{
     console.log({message: "password does not match"});
           };
       User.findOne({ otp }, (err, user) => {
-        if (err || !user) {
-          return res
-            .status(400)
-            .json({ error: "user with this token or otp does not exist" });
-        }
-
+       
         const obj = {
           password: hash,
         };

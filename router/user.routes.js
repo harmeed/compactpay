@@ -1,5 +1,5 @@
 const express = require('express');
-const { userSignup, userLogin, updateKyc, getUserByEmail, transactionPin, forgotPassword, resetPassword } = require('../controller/user.controller');
+const { userSignup, userLogin, updateKyc, getUserByEmail, transactionPin, forgotPassword, resetPassword, otpVerification } = require('../controller/user.controller');
 const router = express.Router();
 
 router.post('/signup',userSignup);
@@ -10,6 +10,7 @@ router.put('/update',updateKyc);
 router.put('/transpin',transactionPin);
 router.put('/forgotpassword',forgotPassword);
 router.put('/resetpassword',resetPassword);
+router.put('/otpVerification', otpVerification);
 
 router.get('/:email', getUserByEmail);
 
