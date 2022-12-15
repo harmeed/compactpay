@@ -1,5 +1,5 @@
 const express = require('express');
-const { userSignup, userLogin, updateKyc, getUserByEmail, transactionPin, forgotPassword, resetPassword, otpVerification } = require('../controller/user.controller');
+const { userSignup, userLogin, updateKyc, getUserByEmail, transactionPin, forgotPassword, resetPassword, otpVerification, getAll, getAllUser } = require('../controller/user.controller');
 const router = express.Router();
 
 router.post('/signup',userSignup);
@@ -12,6 +12,8 @@ router.put('/forgotpassword',forgotPassword);
 router.put('/resetpassword',resetPassword);
 router.put('/otpVerification', otpVerification);
 
+router.get('/all', getAllUser);
 router.get('/:email', getUserByEmail);
+
 
 module.exports = router;
