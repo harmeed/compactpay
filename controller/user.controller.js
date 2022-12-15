@@ -150,7 +150,7 @@ exports.updateKyc= async (req, res) => {
       return res.status(400).json({ message: "please fill all fields" });
     }
    const user = await User.findById(id)
-  //  console.log(user);
+   console.log(user);
       const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
     return  res.status(400).json("Invalid Password")
