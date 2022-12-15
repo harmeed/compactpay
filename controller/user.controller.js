@@ -57,21 +57,22 @@ exports.userSignup = async (req, res, next) => {
       !email ||
       !password ||
       !confirmPassword
-    )
-     {
-      return res.status(400).json({ message: "please fill all fields" });
-    }
-        if (password != confirmPassword) {
-          return res.status(409).json({
-            message: "The entered passwords do not match!",
-          });
-        }
-
-    const checkUserExist = await User.findOne({ email, phoneNumber });
-    if (checkUserExist) {
-      return res.status(409).json({ message: "user already exist" });
-    }
-
+      )
+      {
+        return res.status(400).json({ message: "please fill all fields" });
+      }
+      if (password != confirmPassword) {
+        return res.status(409).json({
+          message: "The entered passwords do not match!",
+        });
+      }
+      
+      const checkUserExist = await User.findOne({ email, phoneNumber });
+      if (checkUserExist) {
+        return res.status(409).json({ message: "user already exist" });
+      }
+      
+     
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -87,7 +88,7 @@ exports.userSignup = async (req, res, next) => {
   } 
   catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Email Already Exists" });
+    return res.status(500).json({ message: error.message });
   }
 };
 

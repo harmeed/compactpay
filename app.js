@@ -5,7 +5,6 @@ const cors = require ("cors");
 const { resetPassword } = require("./controller/user.controller");
 const connectDB = require ("./db/database");
 const userRoutes = require("./router/user.routes");
-const indexRoute = require("./router/index.router");
 
 const app = express();
 app.use(express.json());
@@ -67,7 +66,6 @@ app.post("/resetPassword/:id/:token", (req, res, next) => {
 
 
 app.use("/api/users", userRoutes);
-app.use("/https://api.paystack.co/dedicated_account", indexRoute );
 
 app.use(
   cors({
