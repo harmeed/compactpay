@@ -1,6 +1,5 @@
 const User = require("../model/user.model");
 const nodemailer = require("nodemailer");
-// const { v4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const otpGenerator = require("otp-generator");
@@ -139,7 +138,6 @@ exports.updateKyc= async (req, res) => {
       password,
     } = req.body;
     const id = req.query.id;
-      // const tx_ref = v4();
     if (
       !address ||
       !validMeansOfIdentification ||

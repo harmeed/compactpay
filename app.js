@@ -17,52 +17,52 @@ app.get("/", (req, res) => {
   return res.status(200).json({ message: "home page 😊😊😊😊😊" });
 });
 
-app.post('/forgotPassword', (req, res, next) =>{
-  const { email } = req.body;
-  if (email !== user.email) {
-    res.send('user does not exist')
-    return;
-  }
-  res.send(email);
+// app.post('/forgotPassword', (req, res, next) =>{
+//   const { email } = req.body;
+//   if (email !== user.email) {
+//     res.send('user does not exist')
+//     return;
+//   }
+//   res.send(email);
 
-  const secret = JWT_SECRET + user.Password
-  const payload = {
-    email: user.email,
-    id: user.id
-  }
+//   const secret = JWT_SECRET + user.Password
+//   const payload = {
+//     email: user.email,
+//     id: user.id
+//   }
 
-  const token = jwt.sign (payload, secret, {expiresIn: '15m'})
-  const link = 'http://localhost:5678/reset-password/${user.id}/${token}'
-  console.log(link)
-  res.send('Password reset link has been sent to your email')
-});
-
-
-app.get('/resetPassword/:id/:token',(req, res, next) =>{
-const { id, token } = req.
-res.send(req.params)
+//   const token = jwt.sign (payload, secret, {expiresIn: '15m'})
+//   const link = 'http://localhost:5678/reset-password/${user.id}/${token}'
+//   console.log(link)
+//   res.send('Password reset link has been sent to your email')
+// });
 
 
-if (id !== user.id){
-  res.send('invalid id')
-  return
-}
+// app.get('/resetPassword/:id/:token',(req, res, next) =>{
+// const { id, token } = req.
+// res.send(req.params)
 
-const secret = JWT_SECRET + user.password
-try {
-  const payload = jwt.verify(token, secret)
-res.render('reset-password',{email:user.email})
 
-} catch (error) {
-  console.log(error.message);
-  res.send(error.message);
-}
-});
-app.post("/resetPassword/:id/:token", (req, res, next) => {
-  const { id, token } = req.params;
-  res.send(user);
+// if (id !== user.id){
+//   res.send('invalid id')
+//   return
+// }
 
-});
+// const secret = JWT_SECRET + user.password
+// try {
+//   const payload = jwt.verify(token, secret)
+// res.render('reset-password',{email:user.email})
+
+// } catch (error) {
+//   console.log(error.message);
+//   res.send(error.message);
+// }
+// });
+// app.post("/resetPassword/:id/:token", (req, res, next) => {
+//   const { id, token } = req.params;
+//   res.send(user);
+
+// });
 
 
 app.use("/api/users", userRoutes);
